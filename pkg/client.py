@@ -80,64 +80,44 @@ class Client():
     def list(self):
         return self.imap.list()
 
-    def select(self, str):
-        return self.imap.select(str)
-
-    def inbox(self):
-        return self.imap.select("Inbox")
-
-    def junk(self):
-        return self.imap.select("Junk")
+    def select(self, folder):
+        return self.imap.select(folder)
 
     def logout(self):
         return self.imap.logout()
 
-    def since_date(self, days):
-        mydate = datetime.datetime.now() - datetime.timedelta(days=days)
-        return mydate.strftime("%d-%b-%Y")
+    def __format_date(self, date):
+        return date.strftime("%d-%b-%Y")
 
-    def all_ids_since(self, days):
-        _, d = self.imap.search(None, '(SINCE "'+self.since_date(days)+'")', 'ALL')
+    def all_ids_since(self, date):
+        _, d = self.imap.search(None, '(SINCE "'+self.__format_date(date)+'")', 'ALL')
         list = d[0].split(' ')
         return list
 
-    def all_ids_today(self):
-        return self.all_ids_since(1)
-
-    def read_ids_since(self, days):
-        _, d = self.imap.search(None, '(SINCE "'+self.since_date(days)+'")', 'SEEN')
+    def read_ids_since(self, date):
+        _, d = self.imap.search(None, '(SINCE "'+self.__format_date(date)+'")', 'SEEN')
         list = d[0].split(' ')
         return list
 
-    def read_ids_today(self):
-        return self.read_ids_since(1)
-
-    def unread_ids_since(self, days):
-        _, d = self.imap.search(None, '(SINCE "'+self.since_date(days)+'")', 'UNSEEN')
+    def unread_ids_since(self, date):
+        _, d = self.imap.search(None, '(SINCE "'+self.__format_date(date)+'")', 'UNSEEN')
         list = d[0].split(' ')
         return list
 
-    def unread_ids_today(self):
-        return self.unread_ids_since(1)
+    def lates_id_since(self,date):
+        list = self.all_ids_since(date)
+        latest_id = list[-1]
+        return latest_id
 
-    def all_ids(self):
-        _, d = self.imap.search(None, "ALL")
-        list = d[0].split(' ')
-        return list
+    def latest_unread_id_since(self,date):
+        list = self.unread_ids_since(date)
+        latest_id = list[-1]
+        return latest_id
 
-    def read_ids(self):
-        _, d = self.imap.search(None, "SEEN")
-        list = d[0].split(' ')
-        return list
-
-    def unread_ids(self):
-        _, d = self.imap.search(None, "UNSEEN")
-        list = d[0].split(' ')
-        return list
-
-    def has_unread(self):
-        list = self.unread_ids()
-        return list != ['']
+    def latest_read_id_since(self,date):
+        list = self.read_ids_since(date)
+        latest_id = list[-1]
+        return self.get_email(latest_id)
 
     def get_raw_email(self,id):
         _, d = self.imap.fetch(id, "(RFC822)")
@@ -148,32 +128,6 @@ class Client():
         raw_email = self.get_raw_email(id)
         email_message = email.message_from_string(raw_email)
         return email_message
-
-    def latest_unread(self):
-        list = self.unread_ids()
-        latest_id = list[-1]
-        return self.get_email(latest_id)
-
-    def latest_read(self):
-        list = self.read_ids()
-        latest_id = list[-1]
-        return self.get_email(latest_id)
-
-    def latest_read_today(self):
-        list = self.read_ids_today()
-        latest_id = list[-1]
-        return self.get_email(latest_id)
-
-    def latest_unread_today(self):
-        list = self.unread_ids_today()
-        latest_id = list[-1]
-        return self.get_email(latest_id)
-
-    def set_read_only(self, folder):
-        return self.imap.select(folder, readonly=True)
-
-    def enable_write(self, folder):
-        return self.imap.select(folder, readonly=False)
 
     def mail_body(self,email_message):
         if email_message.is_multipart():
@@ -225,3 +179,9 @@ class Client():
 
     def mail_body_decoded(self,email_message):
         return base64.urlsafe_b64decode(self.mail_body(email_message))
+    
+    def set_read_only(self, folder):
+        return self.imap.select(folder, readonly=True)
+
+    def enable_write(self, folder):
+        return self.imap.select(folder, readonly=False)

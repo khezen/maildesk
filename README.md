@@ -40,39 +40,39 @@ max_retry_attempts = 5
 ```py
 mail.login('emailaccount@domain.com','yourpassword')
 mail.send_email('recipient@email.com','subject','message body')
-
 ```
 
-### latest unread email in inbox
+### select folder
 
 ```py
 mail.login('emailaccount@domain.com','yourpassword')
-mail.inbox()
-print mail.latest_unread()
+mail.select('Inbox')
 ```
 
-Use `mail.select(folder)` to switch to folders other than `inbox`, `junk`.
-
-### latest unread email in inbox today
+### email ID
 
 ```py
 mail.login('emailaccount@domain.com','yourpassword')
-mail.inbox()
-print mail.latest_unread_today()
-```
+mail.select('Inbox')
+date = datetime.date(1970, 1, 1)
 
-### latest read message in inbox
-
-```py
-mail.login('emailaccount@domain.com','yourpassword')
-mail.inbox()
-print mail.latest_read()
+all_ids = mail.all_ids_since(date)
+unread_ids = mail.unread_ids_since(date)
+read_ids = mail.read_ids_since(date)
+latest_id = mail.latest_id_since(date)
+latest_unread_id = mail.latest_unread_id_since(date)
+latest_read_id = mail.latest_read_id_since(date)
 ```
 
 ### email content
 
 ```py
-email_message = mail.latest_unread_today()
+mail.login('emailaccount@domain.com','yourpassword')
+mail.select('Inbox')
+date = datetime.date(1970, 1, 1)
+id = mail.latest_unread_id_since(date)
+
+email_message = mail.get_email(id)
 print mail.mail_body(email_message)
 print mail.mail_subject(email_message)
 print mail.mail_from(email_message)

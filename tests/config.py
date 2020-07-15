@@ -1,8 +1,9 @@
-imap_server = "imap-mail.outlook.com"
-imap_port = 993
-smtp_server = "smtp-mail.outlook.com"
-smtp_port = 587
-max_login_attempts = 5
+max_retry_attempts = 5
+
+# imap_server = "imap-mail.outlook.com"
+# imap_port = 993
+# smtp_server = "smtp-mail.outlook.com"
+# smtp_port = 587
 
 #imap_server = "outlook.office365.com"
 #imap_port = 993

@@ -1,4 +1,4 @@
-# Python Email service Library
+# maildesk
 Python Library to read email from any email service, just dowload to yout python script folder. 
 This library using Imaplib python to read email with IMAP protocol.
 

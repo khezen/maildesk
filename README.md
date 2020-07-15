@@ -78,6 +78,7 @@ print mail.mail_subject(email_message)
 print mail.mail_from(email_message)
 print mail.mail_to(email_message)
 attachments = mail.mail_attachments(email_message)
-for filename in attachments:
-    file_bytes = attachments[filename]
+for key,value in attachments.items():
+    file_name = key
+    file_bytes = value
 ```

@@ -25,9 +25,8 @@ imap_server = "imap.gmail.com"
 imap_port = 993
 smtp_server = "smtp.gmail.com"
 smtp_port = 587
-max_retry_attempts = 5
 
- mail = maildesk.Client(imap_server,imap_port,smtp_server,smtp_port,max_retry_attempts)
+ mail = maildesk.Client(imap_server,imap_port,smtp_server,smtp_port)
  ```
 
 [Complete list of functions](https://github.com/khezen/maildesk/blob/master/pkg/client.py)

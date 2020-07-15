@@ -7,29 +7,20 @@ import base64
 import sys
 
 class Client():
-    def __init__(self, imap_server, imap_port, smtp_server, smtp_port, max_retry_attempts):
+    def __init__(self, imap_server, imap_port, smtp_server, smtp_port):
         self.imap_server = imap_server
         self.imap_port = imap_port
         self.smtp_server = smtp_server
         self.smtp_port = smtp_port
-        self.max_retry_attempts = max_retry_attempts
 
     def login(self, username, password):
         self.username = username
         self.password = password
-        login_attempts = 0
-        while True:
-            try:
-                self.imap = imaplib.IMAP4_SSL(self.imap_server,self.imap_port)
-                r, d = self.imap.login(username, password)
-                assert r == 'OK', 'login failed: %s' % str (r)
-                print(" > Signed in as %s" % self.username, d)
-                return
-            except Exception as err:
-                login_attempts = login_attempts + 1
-                if login_attempts < self.max_retry_attempts:
-                    continue
-                raise Exception("Error: login: %s" %str(err))
+        self.imap = imaplib.IMAP4_SSL(self.imap_server,self.imap_port)
+        r, d = self.imap.login(username, password)
+        assert r == 'OK', 'login failed: %s' % str (r)
+        print(" > Signed in as %s" % self.username, d)
+        return
 
     def send_email_MIME(self, recipient, subject, message):
         msg = email.mime.multipart.MIMEMultipart()
@@ -37,20 +28,12 @@ class Client():
         msg['from'] = self.username
         msg['subject'] = subject
         msg.add_header('reply-to', self.username)
-        attempts = 0
-        while True:
-            try:
-                self.smtp = smtplib.SMTP(self.smtp_server, self.smtp_port)
-                self.smtp.ehlo()
-                self.smtp.starttls()
-                self.smtp.login(self.username, self.password)
-                self.smtp.sendmail(msg['from'], [msg['to']], msg.as_string())
-                print("email replied")
-            except Exception as err:
-                attempts = attempts + 1
-                if attempts < self.max_retry_attempts:
-                    continue
-                raise Exception("Error: send_email_MIME: %s" %str(err))
+        self.smtp = smtplib.SMTP(self.smtp_server, self.smtp_port)
+        self.smtp.ehlo()
+        self.smtp.starttls()
+        self.smtp.login(self.username, self.password)
+        self.smtp.sendmail(msg['from'], [msg['to']], msg.as_string())
+        print("email replied")
 
     def send_email(self, recipient, subject, message):
         headers = "\r\n".join([
@@ -61,21 +44,13 @@ class Client():
             "content-type: text/html"
         ])
         content = headers + "\r\n\r\n" + message
-        attempts = 0
-        while True:
-            try:
-                self.smtp = smtplib.SMTP(self.smtp_server, self.smtp_port)
-                self.smtp.ehlo()
-                self.smtp.starttls()
-                self.smtp.login(self.username, self.password)
-                self.smtp.sendmail(self.username, recipient, content)
-                print("email sent")
-                return
-            except Exception as err:
-                attempts = attempts + 1
-                if attempts < self.max_retry_attempts:
-                    continue
-                raise Exception("Error: send_email: %s" %str(err))
+        self.smtp = smtplib.SMTP(self.smtp_server, self.smtp_port)
+        self.smtp.ehlo()
+        self.smtp.starttls()
+        self.smtp.login(self.username, self.password)
+        self.smtp.sendmail(self.username, recipient, content)
+        print("email sent")
+        return
 
     def list(self):
         return self.imap.list()

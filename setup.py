@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="maildesk",
-    version="0.0.2",
+    version="0.0.4",
     author="Guillaume Simonneau",
     author_email="simonneaug@gmail.com",
     description="email python library",

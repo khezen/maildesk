@@ -69,7 +69,7 @@ mail.inbox()
 print mail.latest_read()
 ```
 
-### Retrive email element:
+### email content
 
 ```py
 email_message = mail.latest_unread_today()

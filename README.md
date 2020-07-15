@@ -39,7 +39,7 @@ max_retry_attempts = 5
 
 ```py
 mail.login('emailaccount@domain.com','yourpassword')
-mail.send_email('recipent','subject','message')
+mail.send_email('recipient@email.com','subject','message body')
 
 ```
 
@@ -78,11 +78,4 @@ print mail.mail_subject(email_message)
 print mail.mail_from(email_message)
 print mail.mail_to(email_message)
 print mail.mail_attachments(email_message)
-```
-
-### To send Message:
-
-```py
-mail.login('emailaccount@domain.com','yourpassword')
-mail.send_email('recipient@email.com','subject','message body')
 ```

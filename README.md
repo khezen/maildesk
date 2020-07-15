@@ -29,7 +29,7 @@ max_retry_attempts = 5
 
  mail = maildesk.Client(imap_server,imap_port,smtp_server,smtp_port,max_retry_attempts)
  ```
- 
+
 [Complete list of functions](https://github.com/khezen/maildesk/blob/master/pkg/client.py)
 
 
@@ -51,6 +51,8 @@ mail.inbox()
 print mail.latest_unread()
 ```
 
+Use `mail.select(folder)` to switch to folders other than `inbox`, `junk`.
+
 ### latest unread email in inbox today
 
 ```py
@@ -66,23 +68,6 @@ mail.login('emailaccount@domain.com','yourpassword')
 mail.inbox()
 print mail.latest_read()
 ```
-
-### latest read message in junk
-
-```py
-mail.login('emailaccount@domain.com','yourpassword')
-mail.junk()
-print mail.latest_read()
-```
-
-### latest read message in junk
-
-```py
-mail.login('emailaccount@domain.com','yourpassword')
-mail.junk()
-print mail.latest_unread()
-
-Use `mail.select(folder)` to switch to folders other than `inbox, `junk`.
 
 ### Retrive email element:
 

@@ -29,33 +29,70 @@ max_retry_attempts = 5
 
  mail = maildesk.Client(imap_server,imap_port,smtp_server,smtp_port,max_retry_attempts)
  ```
+ 
+[Complete list of functions](https://github.com/khezen/maildesk/blob/master/pkg/client.py)
+
+
 ## Examples
 
-### To get latest Unread Message in inbox:
+### send email
+
+```py
+mail.login('emailaccount@domain.com','yourpassword')
+mail.send_email('recipent','subject','message')
+
+```
+
+### latest unread email in inbox
 
 ```py
 mail.login('emailaccount@domain.com','yourpassword')
 mail.inbox()
-print mail.unread()
+print mail.latest_unread()
 ```
 
-### To get latest Unread Message in Junk:
+### latest unread email in inbox today
+
+```py
+mail.login('emailaccount@domain.com','yourpassword')
+mail.inbox()
+print mail.latest_unread_today()
+```
+
+### latest read message in inbox
+
+```py
+mail.login('emailaccount@domain.com','yourpassword')
+mail.inbox()
+print mail.latest_read()
+```
+
+### latest read message in junk
 
 ```py
 mail.login('emailaccount@domain.com','yourpassword')
 mail.junk()
-print mail.unread()
+print mail.latest_read()
 ```
+
+### latest read message in junk
+
+```py
+mail.login('emailaccount@domain.com','yourpassword')
+mail.junk()
+print mail.latest_unread()
 
 Use `mail.select(folder)` to switch to folders other than `inbox, `junk`.
 
 ### Retrive email element:
 
 ```py
-print mail.mail_body()
-print mail.mail_subject()
-print mail.mail_from()
-print mail.mail_to()
+email_message = mail.latest_unread_today()
+print mail.mail_body(email_message)
+print mail.mail_subject(email_message)
+print mail.mail_from(email_message)
+print mail.mail_to(email_message)
+print mail.mail_attachments(email_message)
 ```
 
 ### To send Message:

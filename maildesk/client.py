@@ -101,25 +101,18 @@ class Client():
 
     def get_email(self, id):
         raw_email = self.get_raw_email(id)
-        email_message = email.message_from_string(raw_email)
+        email_message = email.message_from_bytes(raw_email)
         return email_message
 
     def mail_body(self,email_message):
         if email_message.is_multipart():
-            for payload in email_message.get_payload():
-                # if payload.is_multipart(): ...
-                body = (
-                    payload.get_payload()
-                    .split(email_message['from'])[0]
-                    .split('\r\n\r\n2015')[0]
-                )
-                return body
+            for part in email_message.walk():
+                content_disposition = str(part.get("Content-Disposition"))
+                if "attachment" not in content_disposition:
+                    body = part.get_payload(decode=True).decode()
+                    return body
         else:
-            body = (
-                email_message.get_payload()
-                .split(email_message['from'])[0]
-                .split('\r\n\r\n2015')[0]
-            )
+            body = email_message.get_payload(decode=True).decode()
             return body
     
     def mail_attachments(self, email_message):

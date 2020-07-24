@@ -57,6 +57,9 @@ class Client():
 
     def select(self, folder):
         return self.imap.select(folder)
+    
+    def inbox(self):
+        return self.select("Inbox")
 
     def logout(self):
         return self.imap.logout()
@@ -66,17 +69,17 @@ class Client():
 
     def all_ids_since(self, date):
         _, d = self.imap.search(None, '(SINCE "'+self.__format_date(date)+'")', 'ALL')
-        list = d[0].split(' ')
+        list = d[0].decode('utf-8').split(' ')
         return list
 
     def read_ids_since(self, date):
         _, d = self.imap.search(None, '(SINCE "'+self.__format_date(date)+'")', 'SEEN')
-        list = d[0].split(' ')
+        list = d[0].decode('utf-8').split(' ')
         return list
 
     def unread_ids_since(self, date):
         _, d = self.imap.search(None, '(SINCE "'+self.__format_date(date)+'")', 'UNSEEN')
-        list = d[0].split(' ')
+        list = d[0].decode('utf-8').split(' ')
         return list
 
     def lates_id_since(self,date):

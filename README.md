@@ -29,7 +29,7 @@ smtp_port = 587
  mail = maildesk.Client(imap_server,imap_port,smtp_server,smtp_port)
  ```
 
-[Complete list of functions](https://github.com/khezen/maildesk/blob/master/pkg/client.py)
+[Complete list of functions](https://github.com/khezen/maildesk/blob/master/maildesk/client.py)
 
 
 ## Examples
